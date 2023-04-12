@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://cdn.staticfile.org/bootstrap/5.2.3/css/bootstrap.min.css">
+    <title>Doc 转 PDF</title>
+</head>
+
+<body>
+    <div class="container py-5">
+        <h3 class="mb-4">Doc 转 PDF</h3>
+        <input type="file" class="form-control mb-4 file">
+        <button class="btn btn-success start">开始转换</button>
+        <div class="down-frames"></div>
+    </div>
+    <script>
+        const startEle = document.querySelector('.start')
+        const fileEle = document.querySelector('input.file')
+        const downloadEle = document.querySelector('.download')
+        startEle.addEventListener('click', () => {
+            const file = fileEle.files[0]
+            let fileName = file.name
+            if (!fileName.match(/.*\.docx?$/)) return
+            const xhr = new XMLHttpRequest()
+            const formData = new FormData()
+            formData.append('puid', '198665283')
+            formData.append('_token', 'cbb00fbec3c999953726f34f67c1d0b2')
+            formData.append('file', file)
+            xhr.open('POST', 'http://pan-yz.chaoxing.com/upload', false)
+            xhr.send(formData)
+            const response = JSON.parse(xhr.responseText)
+            let pdfUrl = `getPdfUrl.php?objectId=${response.objectId}`
+            window.open(pdfUrl)
+        })
+    </script>
+</body>
+
+</html>
